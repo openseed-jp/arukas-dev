@@ -1,0 +1,33 @@
+
+version: '3'
+services:
+  sshd:
+    build: ./sshd/.
+    image: openseed/arukas-dev:1.0-sshd
+    ports:
+      - "31834:22"
+    environment:
+      AUTHORIZED_KEYS: "ssh-rsa AAAAB3..."
+  nginx:
+    build: ./nginx/.
+    image: openseed/arukas-dev:1.0-sshd-nginx
+    ports:
+      - "80:80"
+      - "31834:22"
+    environment:
+      MARATHON_APP_ID: /xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+      MARATHON_HOST: localhost
+      MARATHON_PORT_22: 31834
+      AUTHORIZED_KEYS: "ssh-rsa AAAAB3..."
+  gotty:
+    build: ./gotty/.
+    image: openseed/arukas-dev:1.0-sshd-nginx-gotty
+    ports:
+      - 80:80
+    environment:
+      GOTTY_CREDENTIAL: "guest:guest"
+      GOTTY_PERMIT_WRITE: "true"
+      MARATHON_APP_ID: /xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+      MARATHON_HOST: localhost
+      MARATHON_PORT_22: 31834
+      AUTHORIZED_KEYS: "ssh-rsa AAAAB3..."
